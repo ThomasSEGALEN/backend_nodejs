@@ -2,7 +2,7 @@
 
 ## Sommaire
 
-1. [Définition du projet](README.md#1-Définition-du-projet-)
+1. [Définition du projet](README.md#1-définition-du-projet-)
 2. [Version](README.md#2-version-)
 3. [Fonctionnalités](README.md#3-fonctionnalités-)
 
