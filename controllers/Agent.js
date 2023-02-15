@@ -14,7 +14,7 @@ const register = (req, res, next) => {
 
             agent.save()
                 .then(() => {
-                    res.status(201).json(agent._id);
+                    res.status(201).json({ agentId: agent._id });
                 })
                 .catch((error) => res.status(400).json({ error }));
         })
@@ -49,12 +49,19 @@ const login = (req, res, next) => {
 };
 
 const updateAgent = (req, res, next) => {
-    Agent.updateOne(
-        { _id: req.params.id, numAgent: req.params.numAgent },
-        { ...req.body, grade: req.body.grade }
-    )
-        .then(() => res.status(200).json({ success: 'Agent modifié' }))
-        .catch(() => res.status(400).json({ message: 'Pas autorisé' }));
+    const agentObject = JSON.parse(req.body.agent);
+
+    Agent.findOne({ numAgent: req.auth.numAgent })
+        .then((agent) => {
+            if (!agent) {
+                res.status(401).json({ message: 'Pas autorisé' });
+            } else {
+                Agent.updateOne({ numAgent: req.auth.numAgent }, { grade: agentObject.grade })
+                    .then(() => res.status(200).json({ success: 'Agent modifié' }))
+                    .catch((error) => res.status(400).json({ error }));
+            }
+        })
+        .catch((error) => res.status(400).json({ error }));
 };
 
 module.exports = { register, login, updateAgent };
